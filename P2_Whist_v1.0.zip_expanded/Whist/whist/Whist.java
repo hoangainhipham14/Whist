@@ -122,15 +122,7 @@ private void initRound() {
 	      hands[i].draw();
 	    }
 	    //for (int i = 1; i < nbPlayers; i++)  // This code can be used to visually hide the cards in a hand (make them face down)
-<<<<<<< HEAD
-<<<<<<< HEAD
            //  hands[i].setVerso(true);
-=======
-        //     hands[i].setVerso(true);
->>>>>>> f1a211a57936a7828777afa8654fc1a5aa02e09c
-=======
-        //     hands[i].setVerso(true);
->>>>>>> f1a211a57936a7828777afa8654fc1a5aa02e09c
 	    // End graphics
  }
 
