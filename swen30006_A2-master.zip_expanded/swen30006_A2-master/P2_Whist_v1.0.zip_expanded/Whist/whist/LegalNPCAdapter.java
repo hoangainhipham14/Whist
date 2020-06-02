@@ -1,3 +1,4 @@
+
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
 
@@ -6,18 +7,13 @@ import java.awt.Font;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LegalNPC {
+public class LegalNPCAdapter implements INPCAdapter{
 
-	private Hand legalNPC;
+	private LegalNPC legalNPC = new LegalNPC();
 	private Card selected;
 	
-	public LegalNPC(Hand legalNPC) {
-		this.legalNPC = legalNPC;
-	}
-	
-	public Card legalSelect(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
-		
-		selected = Whist.randomCard(hand);
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
+		selected = legalNPC.legalSelect(trumps, lead, hand);
 		
 		while ((selected.getSuit() != trumps && hand.getNumberOfCardsWithSuit(trumps) > 0) || (selected.getSuit() != lead && hand.getNumberOfCardsWithSuit(lead) > 0)) {
 			selected = Whist.randomCard(hand);
@@ -25,5 +21,4 @@ public class LegalNPC {
 		
 		return selected;
 	}
-	
 }

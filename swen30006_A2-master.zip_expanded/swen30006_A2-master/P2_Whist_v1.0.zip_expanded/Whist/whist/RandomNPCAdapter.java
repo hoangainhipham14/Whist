@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomNPCAdapter implements INPCAdapter {
 	
-	private RandomNPC randomNPC;
+	private RandomNPC randomNPC = new RandomNPC();
 	
 	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
 		return randomNPC.randomSelect(trumps, lead, hand);

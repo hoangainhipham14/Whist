@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SmartNPCAdapter implements INPCAdapter {
 	
-	private SmartNPC smartNPC;
+	private SmartNPC smartNPC = new SmartNPC();
 	
 	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
 		return smartNPC.smartSelect(trumps, lead, hand, winningCard);
