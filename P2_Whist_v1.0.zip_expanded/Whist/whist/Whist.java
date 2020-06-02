@@ -45,7 +45,7 @@ public class Whist extends CardGame {
       return list.get(x);
   }
   
-  public boolean rankGreater(Card card1, Card card2) {
+  public static boolean rankGreater(Card card1, Card card2) {
 	  return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
   }
 	 
@@ -169,7 +169,7 @@ private Optional<Integer> playRound() {  // Returns winner, if any
 	        } else {
 		        setStatusText("Player " + nextPlayer + " thinking...");
 		        delay(thinkingTime);
-		        selected = NPCAdapter.selectCard(trumps, lead, hands[nextPlayer]);
+		        selected = NPCAdapter.selectCard(trumps, lead, hands[nextPlayer], winningCard);
 	        }
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));

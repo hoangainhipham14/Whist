@@ -8,15 +8,10 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SmartNPCAdapter implements INPCAdapter {
-
-	private Hand smartNPC;
-	private Card selected;
 	
-	public SmartNPCAdapter(Hand smartNPC) {
-		this.smartNPC = smartNPC;
-	}
+	private SmartNPC smartNPC;
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
-		return selected;
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
+		return smartNPC.smartSelect(trumps, lead, hand, winningCard);
 	}
 }

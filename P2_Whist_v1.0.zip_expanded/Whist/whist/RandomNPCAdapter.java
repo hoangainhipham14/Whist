@@ -11,7 +11,7 @@ public class RandomNPCAdapter implements INPCAdapter {
 	
 	private RandomNPC randomNPC;
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
 		return randomNPC.randomSelect(trumps, lead, hand);
 	}
 }
