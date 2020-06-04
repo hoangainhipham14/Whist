@@ -8,6 +8,5 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public interface INPCAdapter {
-
 	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hands, Card winningCard);
 }
