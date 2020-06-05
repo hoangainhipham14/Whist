@@ -1,15 +1,20 @@
-
-// Plz rename class name later!!!!!!
 public class PlayerFactory {
 
-	private INPCAdapter NPCAdapter;
+	private IPlayerAdapter NPCAdapter;
 	private static PlayerFactory instance;
 	
 	// Factory
-	public INPCAdapter getNPCAdapter(INPCAdapter npc) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public IPlayerAdapter getNPCAdapter(String NPCtype) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		if (NPCAdapter == null) {
-			String className = System.getProperty("npc.class.name");
-			NPCAdapter = (INPCAdapter) Class.forName(className).newInstance();
+			if (NPCtype.equals("Legal_NPCs")) {
+				NPCAdapter = (IPlayerAdapter) new LegalNPCAdapter(NPCtype);
+			} else if (NPCtype.equals("Random_NPCs")) {
+				NPCAdapter = (IPlayerAdapter) new RandomNPCAdapter(NPCtype);
+			} else if (NPCtype.contentEquals("Smart_NPCs")){
+				NPCAdapter = (IPlayerAdapter) new SmartNPCAdapter(NPCtype);
+			} else {
+				NPCAdapter = (IPlayerAdapter) new InteractiveAdapter(NPCtype);
+			}
 		}
 		return NPCAdapter;
 	}

@@ -7,7 +7,8 @@ import java.awt.Font;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface INPCAdapter {
+public interface IPlayerAdapter {
 
 	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hands, Card winningCard);
+	public String getType();
 }

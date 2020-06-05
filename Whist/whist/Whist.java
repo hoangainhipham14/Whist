@@ -5,6 +5,9 @@ import ch.aplu.jgamegrid.*;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -49,7 +52,10 @@ public class Whist extends CardGame {
 	  return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
   }
 	 
-  private INPCAdapter NPCAdapter;
+  private int n_interactive;
+  private int n_random_npcs;
+  private int n_legal_npcs;
+  private int n_smart_npcs;
   private final String version = "1.0";
   public final int nbPlayers = 4;
   public final int nbStartCards = 13;
@@ -57,6 +63,7 @@ public class Whist extends CardGame {
   private final int handWidth = 400;
   private final int trickWidth = 40;
   private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
+  ArrayList<IPlayerAdapter> players = new ArrayList<IPlayerAdapter>();
   private final Location[] handLocations = {
 			  new Location(350, 625),
 			  new Location(75, 350),
@@ -80,11 +87,11 @@ public class Whist extends CardGame {
 
   public void setStatus(String string) { setStatusText(string); }
   
-private int[] scores = new int[nbPlayers];
+  private int[] scores = new int[nbPlayers];
 
-Font bigFont = new Font("Serif", Font.BOLD, 36);
+  Font bigFont = new Font("Serif", Font.BOLD, 36);
 
-private void initScore() {
+  private void initScore() {
 	 for (int i = 0; i < nbPlayers; i++) {
 		 scores[i] = 0;
 		 scoreActors[i] = new TextActor("0", Color.WHITE, bgColor, bigFont);
@@ -92,15 +99,15 @@ private void initScore() {
 	 }
   }
 
-private void updateScore(int player) {
+  private void updateScore(int player) {
 	removeActor(scoreActors[player]);
 	scoreActors[player] = new TextActor(String.valueOf(scores[player]), Color.WHITE, bgColor, bigFont);
 	addActor(scoreActors[player], scoreLocations[player]);
-}
+  }
 
-private Card selected;
+  private Card selected;
 
-private void initRound() {
+  private void initRound() {
 		 hands = deck.dealingOut(nbPlayers, nbStartCards); // Last element of hands is leftover cards; these are ignored
 		 for (int i = 0; i < nbPlayers; i++) {
 			   hands[i].sort(Hand.SortType.SUITPRIORITY, true);
@@ -124,9 +131,9 @@ private void initRound() {
 	    //for (int i = 1; i < nbPlayers; i++)  // This code can be used to visually hide the cards in a hand (make them face down)
            //  hands[i].setVerso(true);
 	    // End graphics
- }
+  }
 
-private Optional<Integer> playRound() {  // Returns winner, if any
+  private Optional<Integer> playRound() {  // Returns winner, if any
 	// Select and display trump suit
 		final Suit trumps = randomEnum(Suit.class);
 		final Actor trumpsActor = new Actor("sprites/"+trumpImage[trumps.ordinal()]);
@@ -140,9 +147,9 @@ private Optional<Integer> playRound() {  // Returns winner, if any
 	for (int i = 0; i < nbStartCards; i++) {
 		trick = new Hand(deck);
     	selected = null;
-        if (0 == nextPlayer) {  // Select lead depending on player type
-    		hands[0].setTouchEnabled(true);
-    		setStatus("Player 0 double-click on card to lead.");
+        if (players.get(nextPlayer).getType().equals("Interactive_Players")) {  // Select lead depending on player type
+        	hands[nextPlayer].setTouchEnabled(true);
+    		setStatusText("Player 0 double-click on card to lead.");
     		while (null == selected) delay(100);
         } else {
     		setStatusText("Player " + nextPlayer + " thinking...");
@@ -162,14 +169,12 @@ private Optional<Integer> playRound() {  // Returns winner, if any
 		for (int j = 1; j < nbPlayers; j++) {
 			if (++nextPlayer >= nbPlayers) nextPlayer = 0;  // From last back to first
 			selected = null;
-	        if (0 == nextPlayer) {
-	    		hands[0].setTouchEnabled(true);
-	    		setStatus("Player 0 double-click on card to follow.");
-	    		while (null == selected) delay(100);
+	        if (players.get(nextPlayer).getType().equals("Interactive_Players")) {
+	        	players.get(nextPlayer).selectCard(trumps, lead, hands[nextPlayer], winningCard);
 	        } else {
 		        setStatusText("Player " + nextPlayer + " thinking...");
 		        delay(thinkingTime);
-		        selected = NPCAdapter.selectCard(trumps, lead, hands[nextPlayer], winningCard);
+		        selected = players.get(nextPlayer).selectCard(trumps, lead, hands[nextPlayer], winningCard);
 	        }
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -214,15 +219,59 @@ private Optional<Integer> playRound() {  // Returns winner, if any
 	}
 	removeActor(trumpsActor);
 	return Optional.empty();
-}
+  }
+  
+  public void propertiesReader() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	  
+	  Properties whistProperties = new Properties();
+	  
+	  // Read properties
+	  FileReader inStream = null;
+	  try {
+		  inStream = new FileReader("whist/legal.properties");
+		  whistProperties.load(inStream);
+	  } finally {
+		  if (inStream != null) {
+			  inStream.close();
+	      }
+	  }
+		
+	  // numbers of interactive players
+	  n_interactive = Integer.parseInt(whistProperties.getProperty("Interactive_Players"));
+	  // numbers of random NPCs
+	  n_random_npcs = Integer.parseInt(whistProperties.getProperty("Random_NPCs"));
+	  // numbers of legal NPCs
+	  n_legal_npcs = Integer.parseInt(whistProperties.getProperty("Legal_NPCs"));
+	  // numbers of smart NPCs
+	  n_smart_npcs = Integer.parseInt(whistProperties.getProperty("Smart_NPCs"));
+	  
+	  for (int i = 0; i < n_interactive; i++) {
+		  players.add(PlayerFactory.getInstance().getNPCAdapter("Interactive_Players"));
+	  }
+	  
+	  for (int i = 0; i < n_smart_npcs; i++) {
+		  players.add(PlayerFactory.getInstance().getNPCAdapter("Smart_NPCs"));
+	  }  
+	  
+	  for (int i = 0; i < n_legal_npcs; i++) {
+		  players.add(PlayerFactory.getInstance().getNPCAdapter("Legal_NPCs"));
+	  }
+	  
+	  for (int i = 0; i < n_random_npcs; i++) {
+		  players.add(PlayerFactory.getInstance().getNPCAdapter("Random_NPCs"));
+	  }
+	 
+	  
+  }
 
-  public Whist()
+  public Whist() throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException
   {
     super(700, 700, 30);
     setTitle("Whist (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
     setStatusText("Initializing...");
     initScore();
     Optional<Integer> winner;
+    propertiesReader();
     do { 
       initRound();
       winner = playRound();
@@ -232,7 +281,7 @@ private Optional<Integer> playRound() {  // Returns winner, if any
     refresh();
   }
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException
   {
 	// System.out.println("Working Directory = " + System.getProperty("user.dir"));
     new Whist();
