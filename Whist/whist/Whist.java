@@ -170,7 +170,9 @@ public class Whist extends CardGame {
 			if (++nextPlayer >= nbPlayers) nextPlayer = 0;  // From last back to first
 			selected = null;
 	        if (players.get(nextPlayer).getType().equals("Interactive_Players")) {
-	        	players.get(nextPlayer).selectCard(trumps, lead, hands[nextPlayer], winningCard);
+	        	hands[nextPlayer].setTouchEnabled(true);
+	    		setStatusText("Player 0 double-click on card to lead.");
+	    		while (null == selected) delay(100);
 	        } else {
 		        setStatusText("Player " + nextPlayer + " thinking...");
 		        delay(thinkingTime);
@@ -228,7 +230,7 @@ public class Whist extends CardGame {
 	  // Read properties
 	  FileReader inStream = null;
 	  try {
-		  inStream = new FileReader("whist/legal.properties");
+		  inStream = new FileReader("whist/smart.properties");
 		  whistProperties.load(inStream);
 	  } finally {
 		  if (inStream != null) {
@@ -245,22 +247,23 @@ public class Whist extends CardGame {
 	  // numbers of smart NPCs
 	  n_smart_npcs = Integer.parseInt(whistProperties.getProperty("Smart_NPCs"));
 	  
-	  for (int i = 0; i < n_interactive; i++) {
-		  players.add(PlayerFactory.getInstance().getNPCAdapter("Interactive_Players"));
-	  }
-	  
-	  for (int i = 0; i < n_smart_npcs; i++) {
-		  players.add(PlayerFactory.getInstance().getNPCAdapter("Smart_NPCs"));
-	  }  
-	  
-	  for (int i = 0; i < n_legal_npcs; i++) {
-		  players.add(PlayerFactory.getInstance().getNPCAdapter("Legal_NPCs"));
-	  }
-	  
-	  for (int i = 0; i < n_random_npcs; i++) {
-		  players.add(PlayerFactory.getInstance().getNPCAdapter("Random_NPCs"));
-	  }
-	 
+	  // position 0
+	  String position0 = whistProperties.getProperty("Position0");
+	  System.out.println(position0);
+	  // position1
+	  String position1 = whistProperties.getProperty("Position1");
+	  System.out.println(position1);
+	  // position2
+	  String position2 = whistProperties.getProperty("Position2");
+	  System.out.println(position2);
+	  // position3
+	  String position3 = whistProperties.getProperty("Position3");
+	  System.out.println(position3);
+
+	  players.add(PlayerFactory.getInstance().getNPCAdapter(position0));
+	  players.add(PlayerFactory.getInstance().getNPCAdapter(position1));
+      players.add(PlayerFactory.getInstance().getNPCAdapter(position2));
+	  players.add(PlayerFactory.getInstance().getNPCAdapter(position3));
 	  
   }
 

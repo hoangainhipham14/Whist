@@ -5,16 +5,14 @@ public class PlayerFactory {
 	
 	// Factory
 	public IPlayerAdapter getNPCAdapter(String NPCtype) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		if (NPCAdapter == null) {
-			if (NPCtype.equals("Legal_NPCs")) {
-				NPCAdapter = (IPlayerAdapter) new LegalNPCAdapter(NPCtype);
-			} else if (NPCtype.equals("Random_NPCs")) {
-				NPCAdapter = (IPlayerAdapter) new RandomNPCAdapter(NPCtype);
-			} else if (NPCtype.contentEquals("Smart_NPCs")){
-				NPCAdapter = (IPlayerAdapter) new SmartNPCAdapter(NPCtype);
-			} else {
-				NPCAdapter = (IPlayerAdapter) new InteractiveAdapter(NPCtype);
-			}
+		if (NPCtype.equals("Legal_NPCs")) {
+			NPCAdapter = (IPlayerAdapter) new LegalNPCAdapter(NPCtype);
+		} else if (NPCtype.equals("Random_NPCs")) {
+			NPCAdapter = (IPlayerAdapter) new RandomNPCAdapter(NPCtype);
+		} else if (NPCtype.contentEquals("Smart_NPCs")){
+			NPCAdapter = (IPlayerAdapter) new SmartNPCAdapter(NPCtype);
+		} else {
+			NPCAdapter = (IPlayerAdapter) new InteractiveAdapter(NPCtype);
 		}
 		return NPCAdapter;
 	}

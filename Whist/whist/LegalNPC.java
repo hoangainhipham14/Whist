@@ -13,9 +13,9 @@ public class LegalNPC {
 	public Card legalSelect(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
 		selected = Whist.randomCard(hand);
 		
-		while ((selected.getSuit() != trumps && hand.getNumberOfCardsWithSuit(trumps) > 0) || (selected.getSuit() != lead && hand.getNumberOfCardsWithSuit(lead) > 0)) {
+		/*while ((selected.getSuit() != trumps && hand.getNumberOfCardsWithSuit(trumps) > 0) || (selected.getSuit() != lead && hand.getNumberOfCardsWithSuit(lead) > 0)) {
 			selected = Whist.randomCard(hand);
-		}
+		}*/
 		
 		return selected;
 	}

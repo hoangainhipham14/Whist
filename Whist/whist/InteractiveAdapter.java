@@ -10,20 +10,18 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class InteractiveAdapter extends CardGame{
+public class InteractiveAdapter implements IPlayerAdapter{
 
-	Card selected = null;
 	private String type;
 	
 	public InteractiveAdapter(String type) {
 		this.type = type;
 	}
+
+	private InteractivePlayer interactivePlayer = new InteractivePlayer();
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hands, Card winningCard) {
-		hands.setTouchEnabled(true);
-		setStatusText("Player 0 double-click on card to lead.");
-		while (null == selected) delay(100);
-		return selected;
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
+		return Whist.randomCard(hand);
 	}
 	
 	public String getType() {
