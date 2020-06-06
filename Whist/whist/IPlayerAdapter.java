@@ -9,6 +9,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface IPlayerAdapter {
 
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hands, Card winningCard);
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hands);
 	public String getType();
 }

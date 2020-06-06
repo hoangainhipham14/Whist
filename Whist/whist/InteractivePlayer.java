@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class InteractivePlayer extends CardGame{
+public class InteractivePlayer {
+	
+	public Card interactiveSelect(Hand hand) {
+		return null;
+	}
 
 }

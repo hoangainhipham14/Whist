@@ -17,7 +17,7 @@ public class LegalNPCAdapter implements IPlayerAdapter{
 
 	private LegalNPC legalNPC = new LegalNPC();
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
 		return legalNPC.legalSelect(trumps, lead, hand);
 	}
 	

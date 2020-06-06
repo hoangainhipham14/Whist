@@ -57,9 +57,9 @@ public class Whist extends CardGame {
   private int n_legal_npcs;
   private int n_smart_npcs;
   private final String version = "1.0";
-  public final int nbPlayers = 4;
-  public final int nbStartCards = 13;
-  public final int winningScore = 11;
+  public int nbPlayers;
+  public int nbStartCards;
+  public int winningScore;
   private final int handWidth = 400;
   private final int trickWidth = 40;
   private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
@@ -156,6 +156,7 @@ public class Whist extends CardGame {
             delay(thinkingTime);
             selected = randomCard(hands[nextPlayer]);
         }
+        
         // Lead with selected card
 	        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
 			trick.draw();
@@ -176,7 +177,7 @@ public class Whist extends CardGame {
 	        } else {
 		        setStatusText("Player " + nextPlayer + " thinking...");
 		        delay(thinkingTime);
-		        selected = players.get(nextPlayer).selectCard(trumps, lead, hands[nextPlayer], winningCard);
+		        selected = players.get(nextPlayer).selectCard(trumps, lead, hands[nextPlayer]);
 	        }
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -186,7 +187,7 @@ public class Whist extends CardGame {
 					if (selected.getSuit() != lead && hands[nextPlayer].getNumberOfCardsWithSuit(lead) > 0) {
 						 // Rule violation
 						 String violation = "Follow rule broken by player " + nextPlayer + " attempting to play " + selected;
-						 System.out.println(violation);
+						 //System.out.println(violation);
 						 if (enforceRules) 
 							 try {
 								 throw(new BrokeRuleException(violation));
@@ -197,6 +198,7 @@ public class Whist extends CardGame {
 								}  
 					 }
 				// End Check
+
 				 selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 				 System.out.println("winning: suit = " + winningCard.getSuit() + ", rank = " + winningCard.getRankId());
 				 System.out.println(" played: suit = " +    selected.getSuit() + ", rank = " +    selected.getRankId());
@@ -204,7 +206,7 @@ public class Whist extends CardGame {
 					 (selected.getSuit() == winningCard.getSuit() && rankGreater(selected, winningCard)) ||
 					  // trumped when non-trump was winning
 					 (selected.getSuit() == trumps && winningCard.getSuit() != trumps)) {
-					 System.out.println("NEW WINNER");
+					 //System.out.println("NEW WINNER");
 					 winner = nextPlayer;
 					 winningCard = selected;
 				 }
@@ -226,6 +228,7 @@ public class Whist extends CardGame {
   public void propertiesReader() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 	  
 	  Properties whistProperties = new Properties();
+	  Properties parametersProperties = new Properties();
 	  
 	  // Read properties
 	  FileReader inStream = null;
@@ -237,7 +240,24 @@ public class Whist extends CardGame {
 			  inStream.close();
 	      }
 	  }
-		
+	  
+	  // Read properties
+	  try {
+		  inStream = new FileReader("whist/parameters.properties");
+		  parametersProperties.load(inStream);
+	  } finally {
+		  if (inStream != null) {
+			  inStream.close();
+		  }
+	  }
+	  
+	  // numbers of players
+	  nbPlayers = Integer.parseInt(parametersProperties.getProperty("NbPlayers"));
+	  // numbers of start cards
+	  nbStartCards = Integer.parseInt(parametersProperties.getProperty("NbStartCards"));
+	  // winning score
+	  winningScore = Integer.parseInt(parametersProperties.getProperty("WinningScore"));
+	  
 	  // numbers of interactive players
 	  n_interactive = Integer.parseInt(whistProperties.getProperty("Interactive_Players"));
 	  // numbers of random NPCs

@@ -17,8 +17,8 @@ public class SmartNPCAdapter implements IPlayerAdapter {
 	
 	private SmartNPC smartNPC = new SmartNPC();
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
-		return smartNPC.smartSelect(trumps, lead, hand, winningCard);
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
+		return smartNPC.smartSelect(trumps, lead, hand);
 	}
 	
 	public String getType() {

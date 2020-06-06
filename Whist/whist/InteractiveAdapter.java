@@ -20,8 +20,8 @@ public class InteractiveAdapter implements IPlayerAdapter{
 
 	private InteractivePlayer interactivePlayer = new InteractivePlayer();
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
-		return Whist.randomCard(hand);
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
+		return interactivePlayer.interactiveSelect(hand);
 	}
 	
 	public String getType() {

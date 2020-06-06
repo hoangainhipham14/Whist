@@ -16,8 +16,8 @@ public class RandomNPCAdapter implements IPlayerAdapter {
 	}
 	private RandomNPC randomNPC = new RandomNPC();
 	
-	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand, Card winningCard) {
-		return randomNPC.randomSelect(trumps, lead, hand);
+	public Card selectCard(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
+		return randomNPC.randomSelect(hand);
 	}
 	
 	public String getType() {

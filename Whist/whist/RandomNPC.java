@@ -3,7 +3,7 @@ import ch.aplu.jcardgame.Hand;
 
 public class RandomNPC {
 	
-	public Card randomSelect(Whist.Suit trumps, Whist.Suit lead, Hand hand) {
+	public Card randomSelect(Hand hand) {
 		return Whist.randomCard(hand);
 	}
 	
