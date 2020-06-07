@@ -87,11 +87,12 @@ public class Whist extends CardGame {
 
   public void setStatus(String string) { setStatusText(string); }
   
-  private int[] scores = new int[nbPlayers];
+  private int[] scores;
 
   Font bigFont = new Font("Serif", Font.BOLD, 36);
 
   private void initScore() {
+	 scores = new int[nbPlayers];
 	 for (int i = 0; i < nbPlayers; i++) {
 		 scores[i] = 0;
 		 scoreActors[i] = new TextActor("0", Color.WHITE, bgColor, bigFont);
@@ -257,7 +258,7 @@ public class Whist extends CardGame {
 	  nbStartCards = Integer.parseInt(parametersProperties.getProperty("NbStartCards"));
 	  // winning score
 	  winningScore = Integer.parseInt(parametersProperties.getProperty("WinningScore"));
-	  
+      
 	  // numbers of interactive players
 	  n_interactive = Integer.parseInt(whistProperties.getProperty("Interactive_Players"));
 	  // numbers of random NPCs
@@ -292,9 +293,9 @@ public class Whist extends CardGame {
     super(700, 700, 30);
     setTitle("Whist (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
     setStatusText("Initializing...");
-    initScore();
-    Optional<Integer> winner;
     propertiesReader();
+    initScore();
+    Optional<Integer> winner;  
     do { 
       initRound();
       winner = playRound();
