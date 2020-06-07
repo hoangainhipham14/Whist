@@ -233,7 +233,7 @@ public class Whist extends CardGame {
 	  // Read properties
 	  FileReader inStream = null;
 	  try {
-		  inStream = new FileReader("whist/smart.properties");
+		  inStream = new FileReader("whist/whist.properties");
 		  whistProperties.load(inStream);
 	  } finally {
 		  if (inStream != null) {
